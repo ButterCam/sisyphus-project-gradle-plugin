@@ -1,0 +1,25 @@
+[versions]
+kotlin = "1.8.10"
+spring-boot = "2.7.9"
+nebula-contacts = "7.0.0"
+nebula-info = "12.0.1"
+nebula-publishing = "20.1.0"
+gradle-docker = "9.2.1"
+plugin-publishing = "1.1.0"
+kubernetes = "15.0.1"
+ktlint = "11.3.1"
+
+[libraries]
+nebula-info = { module = "com.netflix.nebula:gradle-info-plugin", version.ref = "nebula-info" }
+nebula-publishing = { module = "com.netflix.nebula:nebula-publishing-plugin", version.ref = "nebula-publishing" }
+nebula-contacts = { module = "com.netflix.nebula:gradle-contacts-plugin", version.ref = "nebula-contacts" }
+gradle-docker = { module = "com.bmuschko:gradle-docker-plugin", version.ref = "gradle-docker" }
+gradle-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+gradle-spring = { module = "org.springframework.boot:spring-boot-gradle-plugin", version.ref = "spring-boot" }
+gradle-ktlint = { module = "org.jlleitschuh.gradle:ktlint-gradle", version.ref = "ktlint" }
+kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
+
+[plugins]
+plugin-publishing = { id = "com.gradle.plugin-publish", version.ref = "plugin-publishing" }
+kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }

@@ -13,8 +13,10 @@ class JavaLibraryProjectPlugin : Plugin<Project> {
             if (!it) return
         }
 
-        target.tryApplyPluginClass("nebula.plugin.publishing.maven.MavenPublishPlugin")
-        target.tryApplyPluginClass("nebula.plugin.publishing.publications.JavadocJarPlugin")
-        target.tryApplyPluginClass("nebula.plugin.publishing.publications.SourceJarPlugin")
+        if (!target.pluginManager.hasPlugin("com.gradle.plugin-publish")) {
+            target.tryApplyPluginClass("nebula.plugin.publishing.maven.MavenPublishPlugin")
+            target.tryApplyPluginClass("nebula.plugin.publishing.publications.JavadocJarPlugin")
+            target.tryApplyPluginClass("nebula.plugin.publishing.publications.SourceJarPlugin")
+        }
     }
 }

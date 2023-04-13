@@ -23,6 +23,8 @@ open class ExtractBootJarLayer : Exec() {
     }
 
     override fun exec() {
+        outputDirectory.deleteRecursively()
+        outputDirectory.mkdirs()
         this.workingDir = outputDirectory
         this.args(bootJars.firstOrNull { it.name.endsWith(".jar") }?.absolutePath ?: return)
         this.args("extract")

@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "com.bybutter.sisyphus.tools"
-version = "1.7.2"
+version = "1.7.3"
 description = "Plugin for easy configuring Gradle and plugins in Sisyphus Framework"
 
 repositories {

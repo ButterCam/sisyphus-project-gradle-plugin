@@ -112,6 +112,7 @@ class SisyphusDockerPlugin : Plugin<Project> {
             it.buildArgs.put("PROJECT_NAME", target.name)
             it.buildArgs.put("PROJECT_VERSION", target.version.toString())
             it.platform.set(sisyphusDocker.platform)
+            it.network.set(sisyphusDocker.network)
             it.images.add("${target.name}:${target.version}")
             it.images.addAll(sisyphusDocker.images)
         }
@@ -171,6 +172,7 @@ class SisyphusDockerPlugin : Plugin<Project> {
 
 open class SisyphusDockerExtension(factory: ObjectFactory, sisyphus: SisyphusExtension) {
     val platform: Property<String> = factory.property(String::class.java)
+    val network: Property<String> = factory.property(String::class.java)
     val baseImage: Property<String> = factory.property(String::class.java)
     val ports: ListProperty<Int> = factory.listProperty(Int::class.java).empty()
     val images: SetProperty<String> = factory.setProperty(String::class.java).empty()

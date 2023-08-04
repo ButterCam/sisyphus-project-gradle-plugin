@@ -1,13 +1,12 @@
 [versions]
-kotlin = "1.8.10"
-spring-boot = "2.7.9"
-nebula-contacts = "7.0.0"
-nebula-info = "12.0.1"
-nebula-publishing = "20.1.0"
-gradle-docker = "9.2.1"
-plugin-publishing = "1.1.0"
-kubernetes = "15.0.1"
-ktlint = "11.3.1"
+kotlin = "1.9.0"
+spring-boot = "3.1.2"
+nebula-contacts = "7.0.1"
+nebula-info = "12.1.6"
+nebula-publishing = "20.3.0"
+gradle-docker = "9.3.2"
+plugin-publishing = "1.2.0"
+ktlint = "11.5.0"
 
 [libraries]
 nebula-info = { module = "com.netflix.nebula:gradle-info-plugin", version.ref = "nebula-info" }

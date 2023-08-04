@@ -1,6 +1,5 @@
 package com.bybutter.sisyphus.project.gradle.publishing
 
-import com.bybutter.sisyphus.project.gradle.SisyphusExtension
 import com.bybutter.sisyphus.project.gradle.ensurePlugin
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -16,7 +15,6 @@ class ProjectSigningPlugin : Plugin<Project> {
             if (!it) return
         }
 
-        val sisyphus = target.extensions.getByType(SisyphusExtension::class.java)
         val publishing = target.extensions.getByType(PublishingExtension::class.java)
 
         if (target.hasProperty("signing.gnupg.keyName")) {

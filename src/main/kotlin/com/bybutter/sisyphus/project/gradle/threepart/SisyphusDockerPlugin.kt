@@ -68,7 +68,7 @@ class SisyphusDockerPlugin : Plugin<Project> {
                 it.instructions.add(instruction)
             }
 
-            bootJar.layered.layerOrder.forEach { layer ->
+            bootJar.layered.layerOrder.get().forEach { layer ->
                 it.copyFile("$layer/", "./")
                 it.runCommand("true")
             }

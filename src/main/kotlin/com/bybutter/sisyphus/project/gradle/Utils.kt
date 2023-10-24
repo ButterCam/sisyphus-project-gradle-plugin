@@ -12,7 +12,10 @@ internal fun Project.isRelease(): Boolean {
     return !isSnapshot()
 }
 
-internal fun Project.ensurePlugin(vararg ids: String, block: (Project) -> Unit): Boolean {
+internal fun Project.ensurePlugin(
+    vararg ids: String,
+    block: (Project) -> Unit,
+): Boolean {
     for (id in ids) {
         if (!pluginManager.hasPlugin(id)) {
             pluginManager.withPlugin(id) {
@@ -25,7 +28,11 @@ internal fun Project.ensurePlugin(vararg ids: String, block: (Project) -> Unit):
     return true
 }
 
-internal inline fun Project.ensurePlugin(id: String, noinline block: (Project) -> Unit, returnBlock: () -> Unit) {
+internal inline fun Project.ensurePlugin(
+    id: String,
+    noinline block: (Project) -> Unit,
+    returnBlock: () -> Unit,
+) {
     if (!pluginManager.hasPlugin(id)) {
         pluginManager.withPlugin(id) {
             block(this)
@@ -34,7 +41,10 @@ internal inline fun Project.ensurePlugin(id: String, noinline block: (Project) -
     }
 }
 
-internal fun Project.tryApplyPluginClass(className: String, action: () -> Unit = {}): Boolean {
+internal fun Project.tryApplyPluginClass(
+    className: String,
+    action: () -> Unit = {},
+): Boolean {
     return try {
         val plugin = Class.forName(className)
         action()
@@ -47,32 +57,37 @@ internal fun Project.tryApplyPluginClass(className: String, action: () -> Unit =
 
 internal fun RepositoryHandler.applyFromRepositoryKeys(
     repositories: Map<String, Repository>,
-    repositoryKeys: Collection<String>
+    repositoryKeys: Collection<String>,
 ) {
     for (repositoryKey in repositoryKeys) {
-        val repository = when (repositoryKey) {
-            "local" -> repositories[repositoryKey] ?: run {
-                this.mavenLocal()
-                null
-            }
+        val repository =
+            when (repositoryKey) {
+                "local" ->
+                    repositories[repositoryKey] ?: run {
+                        this.mavenLocal()
+                        null
+                    }
 
-            "central" -> repositories[repositoryKey] ?: run {
-                this.mavenCentral()
-                null
-            }
+                "central" ->
+                    repositories[repositoryKey] ?: run {
+                        this.mavenCentral()
+                        null
+                    }
 
-            "portal" -> repositories[repositoryKey] ?: run {
-                this.gradlePluginPortal()
-                null
-            }
+                "portal" ->
+                    repositories[repositoryKey] ?: run {
+                        this.gradlePluginPortal()
+                        null
+                    }
 
-            "google" -> repositories[repositoryKey] ?: run {
-                this.google()
-                null
-            }
+                "google" ->
+                    repositories[repositoryKey] ?: run {
+                        this.google()
+                        null
+                    }
 
-            else -> repositories[repositoryKey]
-        }
+                else -> repositories[repositoryKey]
+            }
 
         repository ?: continue
 

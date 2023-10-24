@@ -68,21 +68,23 @@ class ProjectLicensePlugin : Plugin<Project> {
     }
 
     companion object {
-        private val licenseRegex = mapOf(
-            "MIT License" to "MIT License".toRegex(),
-            "Apache License 2.0" to """Apache License\s+Version 2\.0""".toRegex(),
-            "Mozilla Public License 2.0" to """Mozilla Public License Version 2\.0""".toRegex(),
-            "GNU AGPLv3" to """GNU AFFERO GENERAL PUBLIC LICENSE\s+Version 3""".toRegex(),
-            "GNU GPLv3" to """GNU GENERAL PUBLIC LICENSE\s+Version 3""".toRegex(),
-            "GNU LGPLv3" to """GNU LESSER GENERAL PUBLIC LICENSE\s+Version 3""".toRegex(),
-            "Boost Software License 1.0" to """Boost Software License - Version 1\.0""".toRegex(),
-            "The Unlicense" to """This is free and unencumbered software released into the public domain\.""".toRegex(),
-            "WTFPL" to "DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE".toRegex()
-        )
-        private val githubPatterns = listOf(
-            """git@github.com:([a-zA-Z0-9-_.]+?):([a-zA-Z0-9-_.]+?).git""".toRegex(),
-            """https?://github.com/([a-zA-Z0-9-_.]+?)/([a-zA-Z0-9-_.]+?)\.git""".toRegex(),
-            """https?://github.com/([a-zA-Z0-9-_.]+?)/([a-zA-Z0-9-_.]+)""".toRegex()
-        )
+        private val licenseRegex =
+            mapOf(
+                "MIT License" to "MIT License".toRegex(),
+                "Apache License 2.0" to """Apache License\s+Version 2\.0""".toRegex(),
+                "Mozilla Public License 2.0" to """Mozilla Public License Version 2\.0""".toRegex(),
+                "GNU AGPLv3" to """GNU AFFERO GENERAL PUBLIC LICENSE\s+Version 3""".toRegex(),
+                "GNU GPLv3" to """GNU GENERAL PUBLIC LICENSE\s+Version 3""".toRegex(),
+                "GNU LGPLv3" to """GNU LESSER GENERAL PUBLIC LICENSE\s+Version 3""".toRegex(),
+                "Boost Software License 1.0" to """Boost Software License - Version 1\.0""".toRegex(),
+                "The Unlicense" to """This is free and unencumbered software released into the public domain\.""".toRegex(),
+                "WTFPL" to "DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE".toRegex(),
+            )
+        private val githubPatterns =
+            listOf(
+                """git@github.com:([a-zA-Z0-9-_.]+?):([a-zA-Z0-9-_.]+?).git""".toRegex(),
+                """https?://github.com/([a-zA-Z0-9-_.]+?)/([a-zA-Z0-9-_.]+?)\.git""".toRegex(),
+                """https?://github.com/([a-zA-Z0-9-_.]+?)/([a-zA-Z0-9-_.]+)""".toRegex(),
+            )
     }
 }

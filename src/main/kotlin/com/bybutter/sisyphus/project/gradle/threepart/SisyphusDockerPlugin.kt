@@ -43,7 +43,10 @@ class SisyphusDockerPlugin : Plugin<Project> {
         }
     }
 
-    private fun registerExtractLayerTask(target: Project, bootJar: BootJar) {
+    private fun registerExtractLayerTask(
+        target: Project,
+        bootJar: BootJar,
+    ) {
         target.tasks.register("extractBootJarLayer", ExtractBootJarLayer::class.java) {
             it.dependsOn(bootJar)
             it.bootJars = bootJar.outputs.files
@@ -51,7 +54,11 @@ class SisyphusDockerPlugin : Plugin<Project> {
         }
     }
 
-    private fun registerDockerfileTask(target: Project, sisyphusDocker: SisyphusDockerExtension, bootJar: BootJar) {
+    private fun registerDockerfileTask(
+        target: Project,
+        sisyphusDocker: SisyphusDockerExtension,
+        bootJar: BootJar,
+    ) {
         target.tasks.register("dockerfile", Dockerfile::class.java) {
             it.arg("PROJECT_NAME")
             it.arg("PROJECT_VERSION")
@@ -80,7 +87,7 @@ class SisyphusDockerPlugin : Plugin<Project> {
             it.entryPoint(
                 "java",
                 *sisyphusDocker.jvmArgs.get().toTypedArray(),
-                "org.springframework.boot.loader.JarLauncher"
+                "org.springframework.boot.loader.JarLauncher",
             )
         }
     }
@@ -105,7 +112,10 @@ class SisyphusDockerPlugin : Plugin<Project> {
         }
     }
 
-    private fun registerDockerBuild(target: Project, sisyphusDocker: SisyphusDockerExtension) {
+    private fun registerDockerBuild(
+        target: Project,
+        sisyphusDocker: SisyphusDockerExtension,
+    ) {
         target.tasks.register("dockerBuild", DockerBuildImage::class.java) {
             it.dependsOn(target.tasks.named("dockerSync"))
             it.group = "docker"
@@ -121,19 +131,21 @@ class SisyphusDockerPlugin : Plugin<Project> {
     private fun registerDockerPush(
         target: Project,
         sisyphusDocker: SisyphusDockerExtension,
-        sisyphus: SisyphusExtension
+        sisyphus: SisyphusExtension,
     ) {
-        val registries = sisyphus.dockerPublishRegistries.get().associate {
-            it to sisyphus.repositories.getting(it).orNull
-        }
+        val registries =
+            sisyphus.dockerPublishRegistries.get().associate {
+                it to sisyphus.repositories.getting(it).orNull
+            }
 
         val baseName = "${target.name}:${target.version}"
 
         sisyphusDocker.images.get().forEach { image ->
-            val repository = registries.entries.firstOrNull {
-                val url = it.value?.url ?: return@firstOrNull false
-                image == "$url/$baseName"
-            } ?: return@forEach
+            val repository =
+                registries.entries.firstOrNull {
+                    val url = it.value?.url ?: return@firstOrNull false
+                    image == "$url/$baseName"
+                } ?: return@forEach
 
             target.tasks.register("dockerPush" + GUtil.toCamelCase(repository.key), DockerPushImage::class.java) {
                 it.dependsOn(target.tasks.named("dockerBuild"))
@@ -186,7 +198,8 @@ open class SisyphusDockerExtension(factory: ObjectFactory, sisyphus: SisyphusExt
             in 1..7,
             in 9..10,
             in 12..16,
-            null -> {
+            null,
+            -> {
             }
 
             else -> {
@@ -203,7 +216,7 @@ open class SisyphusDockerExtension(factory: ObjectFactory, sisyphus: SisyphusExt
                 }.map {
                     "${it.url}/$baseName"
                 }
-            }
+            },
         )
     }
 
@@ -215,11 +228,17 @@ open class SisyphusDockerExtension(factory: ObjectFactory, sisyphus: SisyphusExt
         configure(instructions)
     }
 
-    fun ListProperty<Instruction>.copyFile(source: String, destination: String) {
+    fun ListProperty<Instruction>.copyFile(
+        source: String,
+        destination: String,
+    ) {
         add(Dockerfile.CopyFileInstruction(Dockerfile.CopyFile(source, destination)))
     }
 
-    fun ListProperty<Instruction>.addFile(source: String, destination: String) {
+    fun ListProperty<Instruction>.addFile(
+        source: String,
+        destination: String,
+    ) {
         add(Dockerfile.AddFileInstruction(Dockerfile.File(source, destination)))
     }
 

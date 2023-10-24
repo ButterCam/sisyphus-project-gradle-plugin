@@ -79,9 +79,9 @@ open class SisyphusExtension(val project: Project) {
             branchName != null -> "$branchName-SNAPSHOT"
             githubRef != null && pullRequestRefRegex.matches(githubRef) ->
                 "PR-${
-                pullRequestRefRegex.matchEntire(
-                    githubRef
-                )?.groupValues?.get(1)
+                    pullRequestRefRegex.matchEntire(
+                        githubRef,
+                    )?.groupValues?.get(1)
                 }-SNAPSHOT"
 
             else -> null

@@ -20,10 +20,11 @@ class SisyphusAntlrKotlinPlugin : Plugin<Project> {
         val sourceSets = target.extensions.getByType(SourceSetContainer::class.java)
 
         sourceSets.forEach {
-            val generateTaskName = when (it.name) {
-                "main" -> "generateGrammarSource"
-                else -> "generate${GUtil.toCamelCase(it.name)}GrammarSource"
-            }
+            val generateTaskName =
+                when (it.name) {
+                    "main" -> "generateGrammarSource"
+                    else -> "generate${GUtil.toCamelCase(it.name)}GrammarSource"
+                }
             target.tasks.named(generateTaskName, AntlrTask::class.java).configure { task ->
                 it.java.setSrcDirs(it.java.srcDirs.filter { task.outputDirectory.absolutePath != it.absolutePath })
                 it.java.srcDir(task)

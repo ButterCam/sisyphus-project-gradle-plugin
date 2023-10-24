@@ -27,7 +27,9 @@ enum class SisyphusDevelopmentLayer {
     /**
      * Layer 3, Framework development, include [API], [PLATFORM]
      */
-    FRAMEWORK;
+    FRAMEWORK,
+
+    ;
 
     companion object {
         val attribute = Attribute.of(SisyphusDevelopmentLayer::class.java)
@@ -46,7 +48,10 @@ fun <T : Dependency> Project.frameworkLayer(dependency: T): Dependency {
     return layer(dependency, SisyphusDevelopmentLayer.FRAMEWORK)
 }
 
-fun <T : Dependency> Project.layer(dependency: T, layer: SisyphusDevelopmentLayer): Dependency {
+fun <T : Dependency> Project.layer(
+    dependency: T,
+    layer: SisyphusDevelopmentLayer,
+): Dependency {
     val sisyphus = extensions.findByType(SisyphusExtension::class.java) ?: return dependency
     if (!sisyphus.developer.isPresent) return dependency
     if (sisyphus.layer.get().ordinal < layer.ordinal) return dependency
@@ -79,7 +84,10 @@ fun <T : Dependency> Project.frameworkLayer(dependency: Provider<T>): Provider<D
     return layer(dependency, SisyphusDevelopmentLayer.FRAMEWORK)
 }
 
-fun <T : Dependency> Project.layer(dependency: Provider<T>, layer: SisyphusDevelopmentLayer): Provider<Dependency> {
+fun <T : Dependency> Project.layer(
+    dependency: Provider<T>,
+    layer: SisyphusDevelopmentLayer,
+): Provider<Dependency> {
     return dependency.map {
         layer(it, layer)
     }

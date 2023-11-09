@@ -31,39 +31,54 @@ open class SisyphusExtension(val project: Project) {
         project.objects.mapProperty(String::class.java, ParsedModuleStringNotation::class.java).empty()
 
     init {
-        developer.set(project.findProperty("sisyphus.developer") as? String)
+        developer.set(project.resolveProperty("sisyphus.developer"))
         for (key in project.properties.keys) {
             val result = repositoryUrlRegex.matchEntire(key) ?: continue
             val repositoryName = result.groupValues[1]
 
-            val url = project.findProperty("sisyphus.repositories.$repositoryName.url") as? String ?: continue
-            val username = project.findProperty("sisyphus.repositories.$repositoryName.username") as? String
-            val password = project.findProperty("sisyphus.repositories.$repositoryName.password") as? String
+            val url = project.resolveProperty("sisyphus.repositories.$repositoryName.url") ?: continue
+            val username = project.resolveProperty("sisyphus.repositories.$repositoryName.username")
+            val password =project.resolveProperty("sisyphus.repositories.$repositoryName.password") as? String
 
             repositories.put(repositoryName, Repository(url, username, password))
         }
 
-        (project.findProperty("sisyphus.dependency.repositories") as? String)?.split(',')?.let {
+        project.resolveProperty("sisyphus.dependency.repositories")?.split(',')?.let {
             dependencyRepositories.set(it)
         }
-        (project.findProperty("sisyphus.release.repositories") as? String)?.split(',')?.let {
+        project.resolveProperty("sisyphus.release.repositories")?.split(',')?.let {
             releaseRepositories.set(it)
         }
-        (project.findProperty("sisyphus.snapshot.repositories") as? String)?.split(',')?.let {
+        project.resolveProperty("sisyphus.snapshot.repositories")?.split(',')?.let {
             snapshotRepositories.set(it)
         }
-        (project.findProperty("sisyphus.docker.repositories") as? String)?.split(',')?.let {
+        project.resolveProperty("sisyphus.docker.repositories")?.split(',')?.let {
             dockerPublishRegistries.set(it)
         }
-        (project.findProperty("sisyphus.dependency.overriding") as? String)?.split(',')?.associate {
+        project.resolveProperty("sisyphus.dependency.overriding")?.split(',')?.associate {
             val moduleStringNotation = ParsedModuleStringNotation(it, "")
             "${moduleStringNotation.group}:${moduleStringNotation.name}" to moduleStringNotation
         }?.let {
             managedDependencies.set(it)
         }
-        (project.findProperty("sisyphus.layer") as? String)?.let { SisyphusDevelopmentLayer.valueOf(it) }?.let {
+        project.resolveProperty("sisyphus.layer")?.let { SisyphusDevelopmentLayer.valueOf(it) }?.let {
             layer.set(it)
         }
+    }
+
+    private fun Project.resolveProperty(name: String): String? {
+        return resolveVariable(findProperty(name) as? String)
+    }
+
+    private fun Project.resolveVariable(value: String?): String? {
+        value ?: return null
+
+        val result = variableRegex.matchEntire(value) ?: return value
+        val variableName = result.groupValues[1]
+
+        val property = findProperty(variableName) ?: System.getenv(variableName) ?: return null
+
+        return resolveVariable(property.toString())
     }
 
     fun recommendVersion(): String? {
@@ -91,5 +106,6 @@ open class SisyphusExtension(val project: Project) {
     companion object {
         private val repositoryUrlRegex = """sisyphus\.repositories\.([A-Za-z][A-Za-z0-9-_]+)\.url""".toRegex()
         private val pullRequestRefRegex = """refs/pull/([0-9]+)/merge""".toRegex()
+        private val variableRegex = """\$\{([A-Za-z][A-Za-z0-9-_.]+)\}""".toRegex()
     }
 }
